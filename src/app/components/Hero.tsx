@@ -8,7 +8,7 @@ import 'swiper/css/navigation';
 
 const Hero = () => {
   return (
-    <div className="relative w-full h-[calc(100vh-4rem)]">
+    <div id="hero" className="relative w-full h-[calc(100vh-4rem)]">
       <Swiper
         className="w-full h-full"
         spaceBetween={0}
