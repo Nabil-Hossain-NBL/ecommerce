@@ -9,8 +9,18 @@ export default function NavBar() {
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex md:hidden items-center justify-center">
+          <div className="flex items-center">
+            <div className="bg-[#1a1a4d] text-white px-2 py-1 rounded font-bold text-xl">
+              D
+            </div>
+            <span className="ml-1 font-semibold text-gray-800">
+              DEEN <span className="text-blue-500">FASHION</span>
+            </span>
+          </div>
+        </Link>
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="hidden md:flex items-center">
             <div className="flex items-center">
               <div className="bg-[#1a1a4d] text-white px-2 py-1 rounded font-bold text-xl">
                 D
@@ -63,7 +73,6 @@ export default function NavBar() {
           </div>
 
           <div className="flex items-center space-x-6">
-           
             <Link href="/cart" className="relative">
               <ShoppingCart className="w-6 h-6 text-gray-700 hover:text-gray-900" />
               <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
