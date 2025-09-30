@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { products, categories } from "./data";
+import ProductCard from "@/components/ProductCard";
 
 type ExpandedSections = {
   [key: string]: boolean;
@@ -30,7 +31,6 @@ export default function ShopPage() {
   const toggleCategory = (category: string) => {
     if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter((c) => c !== category));
-      // Remove subcategories when category is deselected
       const categorySubcats =
         categories.find((cat) => cat.name === category)?.subcategories || [];
       setSelectedSubcategories(
@@ -53,20 +53,18 @@ export default function ShopPage() {
     }
   };
 
-  // Filter products based on selected categories and subcategories
   const filteredProducts = products.filter((product) => {
-    // If no filters are selected, show all products
     if (selectedCategories.length === 0 && selectedSubcategories.length === 0)
       return true;
 
-    // Check category filter
+   
     const categoryMatch =
       selectedCategories.length === 0 ||
       selectedCategories.some((category) =>
         product.categories.includes(category)
       );
 
-    // Check subcategory filter
+    
     const subcategoryMatch =
       selectedSubcategories.length === 0 ||
       selectedSubcategories.some((subcat) =>
@@ -76,7 +74,7 @@ export default function ShopPage() {
     return categoryMatch && subcategoryMatch;
   });
 
-  // Sort products based on the selected option
+
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case "price-low":
@@ -94,7 +92,6 @@ export default function ShopPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex gap-8">
-        {/* Sidebar Filters */}
         <aside className="w-80 bg-gray-50 p-6 rounded-lg h-fit sticky top-4">
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
             <span>▼</span> Filters
@@ -127,7 +124,6 @@ export default function ShopPage() {
                       <span className="font-medium">{category.name}</span>
                     </label>
 
-                    {/* Show subcategories when category is selected */}
                     {selectedCategories.includes(category.name) &&
                       category.subcategories.length > 0 && (
                         <div className="ml-6 mt-2 space-y-2">
@@ -156,7 +152,6 @@ export default function ShopPage() {
           </div>
         </aside>
 
-        {/* Main Content */}
         <main className="flex-1">
           <div className="flex items-center justify-between mb-6">
             <p className="text-gray-600 font-medium">{itemCount} ITEMS</p>
@@ -174,7 +169,6 @@ export default function ShopPage() {
             </div>
           </div>
 
-          {/* Products Grid */}
           {sortedProducts.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">
@@ -193,50 +187,7 @@ export default function ShopPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {sortedProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`/product/${product.id}`}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
-                >
-                  <div className="aspect-square bg-gray-100 relative overflow-hidden">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {product.discount > 0 && (
-                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-md text-sm font-medium">
-                        Save ৳{product.discount}
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-medium text-gray-800 mb-2 line-clamp-2">
-                      {product.name}
-                    </h3>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xl font-bold text-gray-900">
-                        ৳ {product.price}
-                      </span>
-                      {product.originalPrice > product.price && (
-                        <span className="text-sm text-gray-400 line-through">
-                          ৳ {product.originalPrice}
-                        </span>
-                      )}
-                    </div>
-                    <div className="mt-2 flex flex-wrap gap-1">
-                      {product.categories.map((category) => (
-                        <span
-                          key={category}
-                          className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-                        >
-                          {category}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </Link>
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           )}

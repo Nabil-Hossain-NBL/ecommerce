@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import NavBar from '../components/NavBar';
+import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,11 +20,7 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen bg-gray-100`}>
         <NavBar />
         {children}
-        <footer className="bg-gray-800 text-white py-8">
-          <div className="container mx-auto text-center">
-            <p>&copy; 2025 Deen Shop. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </body>
     </html>
   );
