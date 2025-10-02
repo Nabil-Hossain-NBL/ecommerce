@@ -5,6 +5,7 @@ import { notFound, useParams } from "next/navigation";
 import { Package, ShoppingCart } from "lucide-react";
 import RelatedProducts from "@/components/RelatedProducts";
 import { products } from "@/app/shop/data";
+import { cartStorage, orderStorage } from "@/lib/storage";
 
 export default function ProductPage() {
   const params = useParams();
@@ -37,11 +38,21 @@ export default function ProductPage() {
       alert("Please select a size");
       return;
     }
-    console.log("Added to cart:", {
-      product,
-      size: selectedSize,
+
+
+    cartStorage.addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      discount: product.discount,
+      image: product.image,
+      categories: product.categories,
+      subcategories: product.subcategories,
       quantity,
+      selectedSize,
     });
+
     alert(`Added ${quantity} item(s) to cart - Size: ${selectedSize}`);
   };
 
@@ -50,14 +61,39 @@ export default function ProductPage() {
       alert("Please select a size");
       return;
     }
-    console.log("Order now:", {
-      product,
-      size: selectedSize,
+
+
+    cartStorage.addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      discount: product.discount,
+      image: product.image,
+      categories: product.categories,
+      subcategories: product.subcategories,
       quantity,
+      selectedSize,
     });
+
+
+    const cartItems = cartStorage.getCartItems();
+    const currentItem = cartItems.find(
+      (item) => item.id === product.id && item.selectedSize === selectedSize
+    );
+
+    if (currentItem) {
+      orderStorage.addOrder({
+        total: currentItem.price * currentItem.quantity,
+        items: [currentItem],
+      });
+    }
+
     alert(
       `Proceeding to checkout - ${quantity} item(s) - Size: ${selectedSize}`
     );
+
+    window.location.href = '/dashboard#cart';
   };
 
   return (
